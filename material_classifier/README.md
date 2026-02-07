@@ -43,6 +43,7 @@ pip install -r requirements.txt
 ```
 
 ## Usage
+
 ```bash
 # Train model
 python3 -m material_classifier.material_classifier_launcher --train_dir /path/to/dataset/training --val_dir /path/to/dataset/validation
