@@ -1,0 +1,6 @@
+todo.txt
+output/
+# notebooks for jupyter
+notebooks/
+# env directory
+.venv/
