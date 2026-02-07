@@ -1,6 +1,9 @@
 todo.txt
 output/
+# python env
+__pycache__/
+.venv/
+*.pyc
+pyvenv.cfg
 # notebooks for jupyter
 notebooks/
-# env directory
-.venv/
