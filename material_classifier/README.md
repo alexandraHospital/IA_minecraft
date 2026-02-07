@@ -1,8 +1,7 @@
 
 # Material Classifier
 
-This module is a trainer for a classifier for Minecraft material used in construction.
-In this directory you will find a trainer for the model.
+This module contains a trainer for a classifier for Minecraft material used in construction.
 
 ## Dataset
 You need a dataset with a training and a validation directory.
@@ -24,8 +23,6 @@ dataset
     ├── end_stone_brick
     └── stone_bricks
 ```
-
-
 
 ## Installation
 
