@@ -71,7 +71,7 @@ class ClassifierTrainer():
         # Turn on inference context manager
         with torch.inference_mode():
             # Loop through DataLoader batches
-            for batch, (X, y) in enumerate(self.val_dataloader):
+            for X, y in self.val_dataloader:
                 # Send data to target device
                 X, y = X.to(self.device), y.to(self.device)
         
@@ -85,7 +85,6 @@ class ClassifierTrainer():
                 # Calculate and accumulate accuracy
                 test_pred_labels = test_pred_logits.argmax(dim=1)
                 test_acc += ((test_pred_labels == y).sum().item()/len(test_pred_labels))
-                # TODO not precise because divided by len(test_pred_labels), if the last batch is smaller than the others
                 
                 if save_errors:
                     idx_to_class = {v: k for k, v in self.val_dataloader.dataset.class_to_idx.items()}
@@ -137,7 +136,7 @@ class ClassifierTrainer():
             results["test_loss"].append(test_loss)
             results["test_acc"].append(test_acc)
             
-            # keep best accuracy over 90%
+            # keep best accuracy over threshold
             if test_acc > best_acc:
                 best_acc = test_acc
                 if test_acc >= threshold:
