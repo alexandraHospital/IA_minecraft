@@ -1,0 +1,30 @@
+{
+    "classes":
+        [
+            { 
+            "name": "stone_bricks",
+            "query": "grey brick stone wall",
+            "block_texture_url":"https://static.wikia.nocookie.net/minecraft_gamepedia/images/b/be/Stone_Bricks_%28texture%29_JE3_BE2.png/revision/latest?cb=20201001141809"
+        },
+        {
+            "name":"cobblestone",
+            "query": "grey cobblestone wall",
+            "block_texture_url":"https://static.wikia.nocookie.net/minecraft_gamepedia/images/a/a7/Cobblestone_%28texture%29_JE5_BE3.png/revision/latest?cb=20201001121005"
+        },
+        {
+            "name": "bricks",
+            "query": "red brick wall",
+            "block_texture_url":"https://static.wikia.nocookie.net/minecraft_gamepedia/images/4/47/Bricks_%28texture%29_JE5_BE3.png/revision/latest?cb=20201006054123"
+        },
+        {
+            "name": "deepslate_bricks",
+            "query": "black brick wall",
+            "block_texture_url": "https://static.wikia.nocookie.net/minecraft_gamepedia/images/7/71/Deepslate_Tiles_%28texture%29_JE2.png/revision/latest?cb=20210224201032"
+        },
+        {
+            "name": "end_stone_brick",
+            "query": "sandstone brick wall",
+            "block_texture_url":"https://static.wikia.nocookie.net/minecraft_gamepedia/images/c/cc/End_Stone_Bricks_%28texture%29_JE2_BE2.png/revision/latest?cb=20201006055224"
+        }
+    ]
+}
