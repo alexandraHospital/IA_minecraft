@@ -7,6 +7,11 @@ from torchvision import datasets, transforms
 # Creating a CNN-based image classifier.
 
 class MaterialClassifier(nn.Module):
+    """
+    Some functions in this class are inspired by Kaggle examples
+    and have been adapted for this project.
+    """
+
     def __init__(self):
         super().__init__()
         self.conv_layer_1 = nn.Sequential(

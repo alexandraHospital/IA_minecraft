@@ -9,6 +9,11 @@ from pathlib import Path
 
 
 class ClassifierTrainer():
+    """
+    Some functions in this class are inspired by Kaggle examples
+    and have been adapted for this project.
+    """
+
     def __init__(self, model, train_dataloader, val_dataloader, optimizer, loss_fn, device, logger):
         self.model = model                       #  torch.nn.Module,
         self.train_dataloader = train_dataloader #  torch.utils.data.DataLoader
@@ -64,7 +69,7 @@ class ClassifierTrainer():
 
         # Put model in eval mode
         self.model.eval() 
-        
+
         # Setup test loss and test accuracy values
         test_loss, test_acc = 0, 0
         
@@ -74,18 +79,18 @@ class ClassifierTrainer():
             for X, y in self.val_dataloader:
                 # Send data to target device
                 X, y = X.to(self.device), y.to(self.device)
-        
+
                 # 1. Forward pass
                 test_pred_logits = self.model(X)
 
                 # 2. Calculate and accumulate loss
                 loss = self.loss_fn(test_pred_logits, y)
                 test_loss += loss.item()
-                
+
                 # Calculate and accumulate accuracy
                 test_pred_labels = test_pred_logits.argmax(dim=1)
                 test_acc += ((test_pred_labels == y).sum().item()/len(test_pred_labels))
-                
+
                 if save_errors:
                     idx_to_class = {v: k for k, v in self.val_dataloader.dataset.class_to_idx.items()}
                     for i in range(len(y)):
@@ -97,7 +102,7 @@ class ClassifierTrainer():
                                 error_dir / f"true_{true_label}_pred_{pred_label}.png"
                             )
 
-                
+
         # Adjust metrics to get average loss and accuracy per batch 
         test_loss = test_loss / len(self.val_dataloader)
         test_acc = test_acc / len(self.val_dataloader)
@@ -107,7 +112,7 @@ class ClassifierTrainer():
     def train(self, epochs,
             threshold, 
             save_errors=False):
-        
+
         # 2. Create empty results dictionary
         results = {"train_loss": [],
             "train_acc": [],
@@ -120,7 +125,7 @@ class ClassifierTrainer():
         for epoch in tqdm(range(epochs)):
             train_loss, train_acc = self.train_step()
             test_loss, test_acc = self.test_step(save_errors)
-            
+
             # 4. Print out what's happening
             print(
                 f"Epoch: {epoch+1} | "
@@ -135,7 +140,7 @@ class ClassifierTrainer():
             results["train_acc"].append(train_acc)
             results["test_loss"].append(test_loss)
             results["test_acc"].append(test_acc)
-            
+
             # keep best accuracy over threshold
             if test_acc > best_acc:
                 best_acc = test_acc

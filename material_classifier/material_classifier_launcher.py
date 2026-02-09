@@ -23,7 +23,7 @@ from utils.plots import plot_loss_curves
 
 
 def material_classifier_launcher():
-    
+
     # Parser with arguments
     parser = argparse.ArgumentParser()
     parser.add_argument("--epochs", type=int, default=1, help="Number of epochs for training")
@@ -60,21 +60,21 @@ def material_classifier_launcher():
     ######################
     output_path = Path("output")
     output_path.mkdir(parents=True, exist_ok=True)
-    
+
 
     #####################
     # Log instantiation #
     #####################
     path_logs = Path("output/logs")
     path_logs.mkdir(parents=True, exist_ok=True)
-    
+
     logger = logging.getLogger(__name__)
     today = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
     log_filename = f"{path_logs}/material_recognizer_{today}.log"
-    
+
     logging.basicConfig(filename=log_filename, level=logging.INFO,
                         format="%(asctime)s %(name)s %(funcName)s %(levelname)s: %(message)s")
-   
+
     logger.info(f"Started")
     logger.info(f"\t executable: {sys.executable}\n\
                 \t numpy version: {np.__version__}\n\
@@ -96,7 +96,7 @@ def material_classifier_launcher():
     validation_transform = transforms.Compose([
         transforms.Resize(IMAGE_SIZE),
         transforms.ToTensor()])
-    
+
     #########################
     # Creating training set #
     #########################
@@ -136,19 +136,19 @@ def material_classifier_launcher():
 
     logger.info(f"{train_dataloader_augmented}")
     logger.info(f"{validation_dataloader_augmented}")
-    
+
 
     ###############
     # Create CNN #
     ##############
-    
+
     # Instantiate an object.
     model = MC().to(device)
-    
+
     # print summary
     mode_summary = summary(model, input_size=[1, 3, IMAGE_WIDTH ,IMAGE_HEIGHT])
     logger.info(f"{mode_summary}")
-    
+
     # Set random seeds
     torch.manual_seed(42)
     torch.cuda.manual_seed(42)
@@ -164,7 +164,7 @@ def material_classifier_launcher():
                  loss_fn, 
                  device, 
                  logger)
-    
+
     logger.info(f"Train model with:\n\tlr: {LR}\n\tepochs: {epochs}\n\tthreshold{threshold}")
 
     # Start the timer
@@ -176,13 +176,13 @@ def material_classifier_launcher():
     # End the timer and print out how long it took
     end_time = timer()
     logger.info(f"Total training time: {end_time-start_time:.3f} seconds")
-    
+
     # Plot curves
     out_plot_name = f"plots_{today}.png"
     plot_loss_curves(model_results, out_plot_name)
-    
+
     logger.info('Finished')
-    
+
 
 if __name__ == "__main__":
     material_classifier_launcher()
