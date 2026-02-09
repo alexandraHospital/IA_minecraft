@@ -22,9 +22,8 @@ class ClassifierTrainer():
         self.loss_fn = loss_fn                   #  torch.nn.Module
         self.device = device                     #  string
         self.logger = logger                     #  logging
-        
-        
-        
+
+
     def train_step(self):
         # Put model in train mode
         self.model.train()
@@ -120,7 +119,7 @@ class ClassifierTrainer():
             "test_acc": []
         }
         best_acc = 0.0
-        
+
         # 3. Loop through training and testing steps for a number of epochs
         for epoch in tqdm(range(epochs)):
             train_loss, train_acc = self.train_step()
