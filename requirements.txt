@@ -3,6 +3,12 @@ numpy
 requests
 torch
 torchvision
-torchinfo
 seaborn
 tqdm
+torchinfo
+opencv-python
+ultralytics
+
+# for notebooks
+jupyter
+ipykernel
