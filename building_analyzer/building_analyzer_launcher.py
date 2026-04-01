@@ -24,16 +24,11 @@ def building_analyzer_launcher():
     args = parser.parse_args()
 
     IMAGE_SIZE = args.img_size
-    TRAIN_DIR = args.train_dir
-    VAL_DIR = args.val_dir
     DATA_FILE = args.data
-    # NUM_WORKERS = args.workers
+
     BATCH_SIZE = args.batch_size
-    # LR = args.lr
 
     epochs = args.epochs
-    threshold = args.threshold_acc
-    save_err = args.save_errors
     
     device = 0 if torch.cuda.is_available() else "cpu"
     
@@ -62,7 +57,8 @@ def building_analyzer_launcher():
                   image_size=IMAGE_SIZE,
                   batch=BATCH_SIZE,
                   epochs=epochs,
-                  data=DATA_FILE)
+                  data=DATA_FILE,
+                  logger=logger)
     trainer.train()
 
     
