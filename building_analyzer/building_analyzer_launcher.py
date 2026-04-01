@@ -5,7 +5,7 @@ import logging
 from datetime import datetime
 from ultralytics import YOLO
 
-from building_analyzer.trainer import BuildingAnalyzerTrainer as BAT
+from building_analyzer.building_analyzer_trainer import BuildingAnalyzerTrainer as BAT
 
 
 def building_analyzer_launcher():
