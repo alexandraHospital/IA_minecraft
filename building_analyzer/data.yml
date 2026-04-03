@@ -1,0 +1,4 @@
+train: ./dataset/cmp/images/train
+val: ./dataset/cmp/images/val
+nc: 11  # Number of classes
+names: ['facade', 'window', 'door', 'cornice', 'sill', 'balcony', 'blind', 'deco', 'molding', 'pillar', 'shop']  # Class names

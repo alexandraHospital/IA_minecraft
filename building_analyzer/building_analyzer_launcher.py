@@ -5,6 +5,7 @@ import logging
 from datetime import datetime
 from ultralytics import YOLO
 import os
+import sys
 
 from building_analyzer.building_analyzer_trainer import BuildingAnalyzerTrainer as BAT
 
@@ -25,10 +26,10 @@ def building_analyzer_launcher():
     if args.data is None:
         module_dir = os.path.dirname(os.path.abspath(__file__))
         DATA_FILE = os.path.join(module_dir, "data.yml")
-    
-
-    print(f"Chemin vers data.yml : {DATA_FILE}")
-    
+    else:
+        if not os.path.exists(args.data):
+            print(f"{args.data} does not exist")
+            sys.exit(1)
 
     BATCH_SIZE = args.batch_size
 
@@ -67,4 +68,4 @@ def building_analyzer_launcher():
 
     
 if __name__ == "__main__":
-    building_analyzer_launcher()
+    sys.exit(building_analyzer_launcher())

@@ -41,9 +41,8 @@ color_palette = [
 ]
 
 DATASET_DIR = "./building_analyzer/dataset/cmp_facade"
-BASE_DIR = "./dataset/base"
 EXTENDED_DIR = "./dataset/extended"
-CMP_DIR = "./dataset/cmp"
+CMP_DIR = "./building_analyzer/dataset/cmp"
 MASK_DIR = CMP_DIR + "/mask"
 LABEL_DIR = CMP_DIR + "/labels"
 IMAGE_DIR = CMP_DIR + "/images"
@@ -167,7 +166,7 @@ def print_mask(base_dir, label_dir, output_dir):
 
 
 # ---- SPLIT TRAIN / VAL ----
-def split_dataset(sources, output="./dataset/cmp", split_ratio=0.8):
+def split_dataset(sources, output=CMP_DIR, split_ratio=0.8):
     print("Split dataset into train/val directories")
     img_train = Path(output) / "images/train"
     img_val = Path(output) / "images/val"
