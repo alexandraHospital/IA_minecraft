@@ -4,6 +4,7 @@ This module contains a trainer for a detection of elements on a building.
 The trainer fine-tunes a YOLO object detection model.
 
 ## Prepare dataset
+
 Download CMP facade datasets (base and extended) : https://cmp.felk.cvut.cz/~tylecr1/facade/
 _from Tyleček, R., & Šára, R. (2013). Spatial Pattern Templates for Recognition of Objects with Regular Structure. Dans Proc. GCPR, Saarbrücken, Germany_
 
