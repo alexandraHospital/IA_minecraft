@@ -40,7 +40,7 @@ color_palette = [
     (32,32,32),   # shop
 ]
 
-DATASET_DIR = "./dataset/cmp_facade"
+DATASET_DIR = "./building_analyzer/dataset/cmp_facade"
 BASE_DIR = "./dataset/base"
 EXTENDED_DIR = "./dataset/extended"
 CMP_DIR = "./dataset/cmp"
@@ -53,6 +53,7 @@ SPLIT_RATIO = 0.8
 
 # add annotation tag to be XML compliant in each xml file
 def add_annotation_tag(xml_dir_path):
+    print("Addind <annotation> to .xml files...")
     xml_dir = Path(xml_dir_path)
     for file in xml_dir.glob("*.xml"):
         with open(file, "r", encoding="utf-8") as f:
@@ -64,8 +65,10 @@ def add_annotation_tag(xml_dir_path):
 
             with open(file, "w", encoding="utf-8") as f:
                 f.write(new_content)
+    print("Done!")
                 
 def convert_to_yolo_detection(input_dir, output_dir):
+    print("Converting .xml to .txt...")
     os.makedirs(output_dir, exist_ok=True)
 
     for filename in os.listdir(input_dir):
@@ -99,10 +102,12 @@ def convert_to_yolo_detection(input_dir, output_dir):
         txt_name = filename.replace(".xml", ".txt")
         with open(os.path.join(output_dir, txt_name), "w") as f:
             f.write("\n".join(yolo_lines))
+    print("Done!")
 
 
 # print in a .png file the mask with all bbox on the photo
 def print_mask(base_dir, label_dir, output_dir):
+    print("Print bbox masks")
     os.makedirs(f"{output_dir}", exist_ok=True)
     image_dir = Path(base_dir)
     for image_path in image_dir.rglob("*.jpg"):
@@ -158,6 +163,7 @@ def print_mask(base_dir, label_dir, output_dir):
             cv2.imwrite(output_path, combined_img)
         else:
             print(f"No .txt file found for {image_path}")
+    print("Done!")
 
 
 # ---- SPLIT TRAIN / VAL ----
@@ -190,7 +196,7 @@ def split_dataset(sources, output="./dataset/cmp", split_ratio=0.8):
         if label.exists():
             shutil.copy(label, lbl_dest / label.name)
 
-    print("Split files finished")
+    print("Done!")
     
 def prepare_dataset():
     add_annotation_tag(DATASET_DIR)
