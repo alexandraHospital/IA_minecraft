@@ -1,7 +1,6 @@
 from ultralytics import YOLO
-import cv2
 import matplotlib.pyplot as plt
-
+import os
 
 class BuildingAnalyzerTrainer:
     def __init__(self, model, data, device, image_size, batch, logger, epochs):

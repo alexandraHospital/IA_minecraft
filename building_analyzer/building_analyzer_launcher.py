@@ -4,6 +4,7 @@ from pathlib import Path
 import logging
 from datetime import datetime
 from ultralytics import YOLO
+import os
 
 from building_analyzer.building_analyzer_trainer import BuildingAnalyzerTrainer as BAT
 
@@ -11,20 +12,23 @@ from building_analyzer.building_analyzer_trainer import BuildingAnalyzerTrainer 
 def building_analyzer_launcher():
      # Parser with arguments
     parser = argparse.ArgumentParser()
-    parser.add_argument("--epochs", type=int, default=1, help="Number of epochs for training")
-    parser.add_argument("--data", type=float, default=1e-4, help="Path of yaml file containing classes")
-    # parser.add_argument("--train_dir", type=str, required=True, help="Dataset training directory")
-    # parser.add_argument("--val_dir", type=str, required=True, help="Dataset validation directory")
-    # parser.add_argument("--threshold_acc",  type=float, default=0.90, help="Threshold above which the model is registered")
+    print(f"--------{os.path.abspath(os.getcwd())}")
+    parser.add_argument("--epochs", type=int, default=10, help="Number of epochs for training")
+    parser.add_argument("--data", type=str, default=None ,help="Path of yaml file containing classes")
     parser.add_argument("--img_size", type=int, default=640, help="Image size")
-    # parser.add_argument("--workers", type=int, default=1, help="Number of workers")
     parser.add_argument("--batch_size", type=int, default=16, help="Batch size")
-    # parser.add_argument("--save_errors", type=bool, default=False, help="Save error images in directory")
 
     args = parser.parse_args()
 
     IMAGE_SIZE = args.img_size
-    DATA_FILE = args.data
+    
+    if args.data is None:
+        module_dir = os.path.dirname(os.path.abspath(__file__))
+        DATA_FILE = os.path.join(module_dir, "data.yml")
+    
+
+    print(f"Chemin vers data.yml : {DATA_FILE}")
+    
 
     BATCH_SIZE = args.batch_size
 
