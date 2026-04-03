@@ -4,6 +4,7 @@
 This module contains a trainer for a classifier for Minecraft material used in construction.
 
 ## Dataset
+
 You need a dataset with a training and a validation directory.
 Classes are determined by the directories inside each training and validation folder.
 
