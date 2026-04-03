@@ -12,8 +12,9 @@ To train YOLO model, we need to transform .xml annotation files into .txt files.
 Unzip dataset and launch prepare_dataset script:
 
 ```bash
+cd IA_minecraft/
 mkdir -p ./building_analyzer/dataset/cmp_facade
-unzip -oj CMP_facade_DB_base.zip -d dataset/cmp_facade && unzip -oj CMP_facade_DB_extended.zip -d dataset/cmp_facade
+unzip -oj /path/to/CMP_facade_DB_base.zip -d dataset/cmp_facade && unzip -oj /path/to/CMP_facade_DB_extended.zip -d dataset/cmp_facade
 python3 -m building_analyzer.prepare_dataset
 ```
 
