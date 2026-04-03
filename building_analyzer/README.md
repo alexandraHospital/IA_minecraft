@@ -4,10 +4,30 @@ This module contains a trainer for a detection of elements on a building.
 The trainer fine-tunes a YOLO object detection model.
 
 ## Prepare dataset
+Download CMP facade datasets (base and extended) : https://cmp.felk.cvut.cz/~tylecr1/facade/
+_from Tyleček, R., & Šára, R. (2013). Spatial Pattern Templates for Recognition of Objects with Regular Structure. Dans Proc. GCPR, Saarbrücken, Germany_
+
+
+To train YOLO model, we need to transform .xml annotation files into .txt files.
+Unzip dataset and launch prepare_dataset script:
+
+```bash
+mkdir -p ./building_analyzer/dataset/cmp_facade
+unzip -oj CMP_facade_DB_base.zip -d dataset/cmp_facade && unzip -oj CMP_facade_DB_extended.zip -d dataset/cmp_facade
+python3 -m building_analyzer.prepare_dataset
+```
+
 _WIP - transform CMP facade dataset annotation xml file into txt file for YOLO model_
 
 ### data.yml file
 _TODO: example of data file_
+```
+train: ./cmp/images/train
+val: ./cmp/images/val
+nc: 11  # Number of classes
+names: ['facade', 'window', 'door', 'cornice', 'sill', 'balcony', 'blind', 'deco', 'molding', 'pillar', 'shop']  # Class names
+```
+
 
 ## Usage
 
