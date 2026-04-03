@@ -18,10 +18,8 @@ unzip -oj /path/to/CMP_facade_DB_base.zip -d dataset/cmp_facade && unzip -oj /pa
 python3 -m building_analyzer.prepare_dataset
 ```
 
-_WIP - transform CMP facade dataset annotation xml file into txt file for YOLO model_
-
 ### data.yml file
-_TODO: example of data file_
+
 ```
 train: ./cmp/images/train
 val: ./cmp/images/val
