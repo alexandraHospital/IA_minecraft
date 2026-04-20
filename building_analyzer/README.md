@@ -19,15 +19,34 @@ unzip -oj /path/to/CMP_facade_DB_base.zip -d dataset/cmp_facade && unzip -oj /pa
 python3 -m building_analyzer.prepare_dataset
 ```
 
+<<<<<<< HEAD
 ### data.yml file
 
 ```
+=======
+One the script is executed, you'll have a dataset such as:
+```
+└── cmp
+    ├── images
+    │   ├── train
+    │   └── val
+    ├── labels
+    │   ├── train
+    │   └── val
+    └── mask
+```
+With a ratio 80-20 for training-validation.
+
+### data.yml file
+This file is used with YOLO fine-tuning:
+
+```yaml
+>>>>>>> 789eec5 (add building analyzer readme + data)
 train: ./cmp/images/train
 val: ./cmp/images/val
 nc: 11  # Number of classes
 names: ['facade', 'window', 'door', 'cornice', 'sill', 'balcony', 'blind', 'deco', 'molding', 'pillar', 'shop']  # Class names
 ```
-
 
 ## Usage
 
