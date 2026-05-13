@@ -2,6 +2,7 @@
 
 This module contains a trainer for a detection of elements on a building.
 The trainer fine-tunes a YOLO object detection model.
+The Ultranalytics Library is ised to fine-tune YOLO: https://docs.ultralytics.com/usage/cfg
 
 ## Prepare dataset
 
@@ -30,8 +31,24 @@ names: ['facade', 'window', 'door', 'cornice', 'sill', 'balcony', 'blind', 'deco
 
 
 ## Usage
+```bash
+usage: building_analyzer_launcher.py [-h] [--epochs EPOCHS] [--data DATA] [--img_size IMG_SIZE] [--batch_size BATCH_SIZE] [--output_dir OUTPUT_DIR]
+
+options:
+  -h, --help            show this help message and exit
+  --epochs EPOCHS       Number of epochs for training
+  --data DATA           Path of yaml file containing classes, by default data.yml at the root directory of the module
+  --img_size IMG_SIZE   Image size
+  --batch_size BATCH_SIZE
+                        Batch size
+  --output_dir OUTPUT_DIR
+                        Output directory for fine_tuned YOLO
+```
+
+Example:
 
 ```bash
-python3 -m building_analyzer.building_analyzer_launcher --data ./path/to/data --batch_size 32 --epochs 100
+python3 -m building_analyzer.building_analyzer_launcher --data ./path/to/data --batch_size 16 --epochs 100
 
 ```
+
