@@ -7,7 +7,7 @@ from pathlib import Path
 import cv2
 import numpy as np
 
-from variables import *
+from utils.variables import *
 
 
 DATASET_DIR = "./building_analyzer/dataset/cmp_facade"

@@ -8,11 +8,11 @@ os.environ.pop("QT_QPA_PLATFORM_PLUGIN_PATH", None)
 
 from PyQt5.QtWidgets import QApplication
 from image_selector import ImageSelector
-from image_data import ImageData
+from IPC.image_processing_controller import ImageProcessingController as IPC
 from buildings.elements import Element
 from buildings.building import Building
 
-from variables import *
+from utils.variables import *
 
 # def choose_material():
     # TODO call material recognizer
@@ -46,15 +46,11 @@ def main():
     #            Create window
     ##################################
     app = QApplication(sys.argv)
-    imageData = ImageData()
-    imageSelector = ImageSelector(imageData)
+    img_processing_controller = IPC()
+    imageSelector = ImageSelector(img_processing_controller)
     imageSelector.show()
-    
-    print(imageSelector.image_data.image_path)
 
 
-
-    
     #######################################
     #            Call yolo on picture
     #######################################

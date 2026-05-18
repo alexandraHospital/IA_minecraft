@@ -7,7 +7,7 @@ from PyQt5.QtGui import QPixmap
 
 
 class ImageSelector(QWidget):
-    def __init__(self, image_data):
+    def __init__(self, image_processing_controller):
         super().__init__()
 
         self.setWindowTitle("Choose picture")
@@ -33,7 +33,7 @@ class ImageSelector(QWidget):
 
         self.setLayout(self.layout)
         
-        self.image_data = image_data
+        self.image_processing_controller = image_processing_controller
 
     def open_file(self):
         file_path, _ = QFileDialog.getOpenFileName(
@@ -44,15 +44,15 @@ class ImageSelector(QWidget):
         )
 
         if file_path:
-            self.image_data.image_path = file_path
+            self.image_processing_controller.image_path = file_path
             pixmap = QPixmap(file_path)
             self.label.setPixmap(pixmap)
 
             self.btn_process.show()
 
     def process_image(self):
-        print(self.image_data.image_path)
-        self.image_data.process_image()
+        print(self.image_processing_controller.image_path)
+        self.image_processing_controller.process_image()
         self.close()
 
 
