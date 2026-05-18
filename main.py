@@ -12,22 +12,7 @@ from image_data import ImageData
 from buildings.elements import Element
 from buildings.building import Building
 
-color_palette = [
-    (255,0,0),     # facade # blue
-    (0,255,0),     # window # green
-    (0,0,255),     # door # red
-    (255,255,0),   # cornice #cyan
-    (255,0,255),   # sill # pink
-    (0,255,255),   # balcony # yellow
-    (128,0,0),     # blind #dark blue
-    (0,128,0),     # deco # dark green
-    (255,0,128),     # molding #
-    (255,255,255),   # pillar
-    (32,32,32),   # shop
-]
-class_names = ['facade', 'window', 'door', 'cornice', 'sill', 'balcony',
-               'blind', 'deco', 'molding', 'pillar', 'shop']
-
+from variables import *
 
 # def choose_material():
     # TODO call material recognizer
@@ -45,7 +30,7 @@ def create_building(results):
     for i, box in enumerate(r.boxes.xyxy.cpu().numpy()):
         x1, y1, x2, y2 = map(int, box)
         cls = classes[i]
-        color = color_palette[cls]
+        color = COLOR_PALETTE[cls]
         element = Element(class_id = cls, bbox = box, score = confidences[i])
         elements.add(element)
 

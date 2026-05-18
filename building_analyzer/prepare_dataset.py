@@ -7,38 +7,8 @@ from pathlib import Path
 import cv2
 import numpy as np
 
+from variables import *
 
-
-CLASS_MAP = {
-    2: 0,   # facade
-    3: 1,   # window
-    4: 2,   # door
-    5: 3,   # cornice
-    6: 4,   # sill
-    7: 5,   # balcony
-    8: 6,   # blind
-    9: 7,   # deco
-    10: 8,  # molding
-    11: 9,  # pillar
-    12: 10  # shop
-}
-
-CLASS_NAME = ['facade', 'window', 'door', 'cornice', 'sill', 'balcony',
-               'blind', 'deco', 'molding', 'pillar', 'shop']
-
-color_palette = [
-    (255,0,0),     # facade # blue
-    (0,255,0),     # window # green
-    (0,0,255),     # door # red
-    (255,255,0),   # cornice #cyan
-    (255,0,255),   # sill # pink
-    (0,255,255),   # balcony # yellow
-    (128,0,0),     # blind #dark blue
-    (0,51,0),     # deco # dark green
-    (255,0,128),     # molding #
-    (255,255,255),   # pillar
-    (32,32,32),   # shop
-]
 
 DATASET_DIR = "./building_analyzer/dataset/cmp_facade"
 EXTENDED_DIR = "./dataset/extended"
@@ -142,7 +112,7 @@ def print_mask(base_dir, label_dir, output_dir):
                 y2 = int(y_center + height / 2)
 
                 # -2 because from 2->12
-                color = color_palette[int(class_id)-2]
+                color = COLOR_PALETTE[int(class_id)-2]
                 cv2.rectangle(mask, (x1, y1), (x2, y2), color, -1)
 
             # Overlay
@@ -152,7 +122,7 @@ def print_mask(base_dir, label_dir, output_dir):
             legend_width = 200
             legend_img = np.zeros((img.shape[0], legend_width, 3), dtype=np.uint8)
             start_y = 30
-            for i, (color, name) in enumerate(zip(color_palette, CLASS_NAME)):
+            for i, (color, name) in enumerate(zip(COLOR_PALETTE, CLASS_NAME)):
                 cv2.rectangle(legend_img, (10, start_y + i*30), (30, start_y + i*30 + 20), color, -1)
                 cv2.putText(legend_img, name, (40, start_y + i*30 + 15),
                             cv2.FONT_HERSHEY_SIMPLEX, 0.6, (255, 255, 255), 1, cv2.LINE_AA)
