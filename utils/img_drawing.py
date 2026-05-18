@@ -3,12 +3,13 @@ import os
 import cv2
 import numpy as np
 
-def sort_boxes(r):
-        classes = r.boxes.cls.cpu().numpy().astype(int)
+
+def sort_boxes(result):
+        classes = result.boxes.cls.cpu().numpy().astype(int)
 
         detections = []
         
-        for i, box in enumerate(r.boxes.xyxy.cpu().numpy()):
+        for i, box in enumerate(result.boxes.xyxy.cpu().numpy()):
             x1, y1, x2, y2 = map(int, box)
             cls = classes[i]
 
@@ -24,7 +25,7 @@ def sort_boxes(r):
 
         return detections
 
-def draw_boxes(image_path, detections, r):
+def draw_boxes(image_path, detections, result):
     base_dir = "./output/results"
     image_name = os.path.splitext(os.path.basename(image_path))[0]
     img = cv2.imread(image_path)
@@ -41,9 +42,45 @@ def draw_boxes(image_path, detections, r):
         # calculates box area
         
         # draw mask
-        if r.masks is not None:
-            mask = r.masks.data[i].cpu().numpy()  # (H, W)
+        if result.masks is not None:
+            mask = result.masks.data[i].cpu().numpy()  # (H, W)
             mask_color = np.array(color, dtype=np.uint8).reshape(1,1,3)
             img = np.where(mask[..., None], (0.5*img + 0.5*mask_color).astype(np.uint8), img)
     # Save
-    cv2.imwrite(base_dir + "/" + image_name + "_mask.jpg", img)
+    save_name = base_dir + "/" + image_name + "_mask.jpg"
+    cv2.imwrite(save_name, img)
+
+
+def extract_facade_for_material_detection(image_path, result):
+    base_dir = "./output/results"
+    image_name = os.path.splitext(os.path.basename(image_path))[0]
+    boxes = result.boxes.xyxy.cpu().numpy()
+    classes = result.boxes.cls.cpu().numpy().astype(int)
+    img = cv2.imread(image_path)
+
+
+    FACADE_CLASS_ID = CLASS_MAP[2]
+
+    facades = []
+
+    for box, cls in zip(boxes, classes):
+        if cls != FACADE_CLASS_ID:
+            continue
+
+        x1, y1, x2, y2 = map(int, box)
+        facades.append((x1, y1, x2, y2))
+
+    if not facades:
+        print("No façade")
+        return None
+
+    x1, y1, x2, y2 = max(
+        facades,
+        key=lambda b: (b[2]-b[0]) * (b[3]-b[1])
+    )
+
+    crop = img[y1:y2, x1:x2]
+
+    cv2.imwrite(base_dir + "/" + image_name + "_facade_crop.jpg", crop)
+
+    return crop

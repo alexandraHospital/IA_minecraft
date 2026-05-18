@@ -144,7 +144,7 @@ class ClassifierTrainer():
             if test_acc > best_acc:
                 best_acc = test_acc
                 if test_acc >= threshold:
-                    save_path = Path("output/model")
+                    save_path = Path("output/models/CT")
                     save_path.mkdir(parents=True, exist_ok=True)
                     torch.save(self.model.state_dict(), f"{save_path}/material_recognizer_model_{best_acc}.pth")
                     self.logger.info(f"Model save with accuracy {best_acc}")
