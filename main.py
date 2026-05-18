@@ -7,7 +7,8 @@ import os
 os.environ.pop("QT_QPA_PLATFORM_PLUGIN_PATH", None)
 
 from PyQt5.QtWidgets import QApplication
-from image_viewer import ImageViewer
+from image_selector import ImageSelector
+from image_data import ImageData
 from buildings.elements import Element
 from buildings.building import Building
 
@@ -54,8 +55,11 @@ def main():
     #            Create window
     ##################################
     app = QApplication(sys.argv)
-    imageViewer = ImageViewer()
-    imageViewer.show()
+    imageData = ImageData()
+    imageSelector = ImageSelector(imageData)
+    imageSelector.show()
+    
+    print(imageSelector.image_data.image_path)
 
 
     #######################################
