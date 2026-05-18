@@ -22,7 +22,7 @@ class ImageSelector(QWidget):
         self.label = QLabel("")
         self.label.setScaledContents(True)
         
-        self.btn_process = QPushButton("Traiter")
+        self.btn_process = QPushButton("Process")
         self.btn_process.clicked.connect(self.process_image)
         self.btn_process.hide()
 
@@ -52,6 +52,7 @@ class ImageSelector(QWidget):
 
     def process_image(self):
         print(self.image_data.image_path)
+        self.image_data.process_image()
         self.close()
 
 

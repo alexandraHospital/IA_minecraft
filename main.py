@@ -36,6 +36,12 @@ def create_building(results):
 
 
 def main():
+    #####################
+    # Output results  #
+    #####################
+    path_logs = Path("output/results")
+    path_logs.mkdir(parents=True, exist_ok=True)
+    
     ##################################
     #            Create window
     ##################################
@@ -47,14 +53,16 @@ def main():
     print(imageSelector.image_data.image_path)
 
 
+
+    
     #######################################
     #            Call yolo on picture
     #######################################
-    # TDB: best model location
-    # model_location = "./output/models/train2/weights/best.pt"
+    # # TDB: best model location
+    # model_location = "./IA_minecraft/output/models/train2"
     # model = YOLO(model_location) # best model location
-    # calls model on this image
-    # results = model(image_path)
+    # # calls model on this image
+    # results = model(imageSelector.image_data.image_path)
     
     ##########################################
     #         Create building
