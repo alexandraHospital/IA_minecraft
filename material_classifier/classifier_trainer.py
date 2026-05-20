@@ -6,6 +6,7 @@ from torchvision.utils import save_image
 from torchvision import datasets, transforms
 from tqdm import tqdm
 from pathlib import Path
+from datetime import datetime
 
 
 class ClassifierTrainer():
@@ -63,8 +64,8 @@ class ClassifierTrainer():
 
     def test_step(self, save_errors=False):
         # save errors images in repo
-        error_dir = Path("output/errors")
-        error_dir.mkdir(exist_ok=True)
+        error_dir = Path(f"output/models/MC/errors")
+        error_dir.mkdir(parents=True, exist_ok=True)
 
         # Put model in eval mode
         self.model.eval() 
@@ -142,12 +143,16 @@ class ClassifierTrainer():
 
             # keep best accuracy over threshold
             if test_acc > best_acc:
+                print(f"{test_acc} > {best_acc}")
+                print(f"{test_acc} >= {threshold} ?")
                 best_acc = test_acc
                 if test_acc >= threshold:
-                    save_path = Path("output/models/CT")
+                    save_path = Path("output/models/MC")
                     save_path.mkdir(parents=True, exist_ok=True)
-                    torch.save(self.model.state_dict(), f"{save_path}/material_recognizer_model_{best_acc}.pth")
-                    self.logger.info(f"Model save with accuracy {best_acc}")
+                    scripted = torch.jit.script(self.model)
+                    torch.jit.save(scripted, f"{save_path}/MC_{best_acc}_best.pth")
+                    # torch.save(self.model.state_dict(), f"{save_path}/MR_{best_acc}_best.pth")
+                    self.logger.info(f"Model save with accuracy {best_acc} at {save_path}/MR_{best_acc}_best.pth")
 
         self.logger.info(f"Best accuracy {best_acc}")
         # 6. Return the filled results at the end of the epochs

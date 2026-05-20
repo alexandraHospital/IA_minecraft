@@ -165,7 +165,7 @@ def material_classifier_launcher():
                  device, 
                  logger)
 
-    logger.info(f"Train model with:\n\tlr: {LR}\n\tepochs: {epochs}\n\tthreshold{threshold}")
+    logger.info(f"Train model with:\n\tlr: {LR}\n\tepochs: {epochs}\n\tthreshold: {threshold}")
 
     # Start the timer
     start_time = timer()
