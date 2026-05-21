@@ -27,6 +27,8 @@ class ImageProcessingController:
 
         facade_sample = extract_region(self.mask, self.image_path, COLOR_PALETTE[0])
         
+        
+        
         # get CNN model
         # TODO: better way with objects?
         # TODO: torch.jit does it exist a better way?
@@ -39,3 +41,4 @@ class ImageProcessingController:
         # transforms.ToTensor()])
         # with torch.no_grad():
         #     output_inference = model(inference_transform)
+        

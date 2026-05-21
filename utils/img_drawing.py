@@ -49,80 +49,58 @@ def draw_boxes(image_path, detections, result):
     
     return mask_img
 
-def extract_region(mask, image_path, color):
+def extract_region(mask, image_path, target_color):
     base_dir = "./output/results"
     image_name = os.path.splitext(os.path.basename(image_path))[0]
-    # load image
+
     image = cv2.imread(image_path)
+
+    y_min, x_min, y_max, x_max = largest_monochrome_rectangle(mask, target_color)
+
+    crop = image[y_min:y_max+1, x_min:x_max+1]
+    crop_mask = mask[y_min:y_max+1, x_min:x_max+1]
+
+    # for debug:
+    cv2.imwrite(base_dir + "/" + image_name + "_facade_crop.jpg", crop)
+    cv2.imwrite(base_dir + "/" + image_name + "_facade_crop_mask.jpg", crop_mask)
     
-    target_color = COLOR_PALETTE[0] # blue
-    matches = np.all(mask == target_color, axis = -1)
-    indices = np.where(matches)
-    
-    print(indices[:10])
+    return crop
 
 
-    # for i from range(0, indices
-    if len(indices[0] > 0):
-        y, x = indices[0][0], indices[1][0]
-        largest_color_rectangle(image, y, x, target_color)
-        print(f"Premier pixel trouvé en ({y}, {x})")
-    else:
-        print("Couleur non trouvée")
-
-    # if len(xs) != 0:
-    #     crop = image[ys.min():ys.max()+1, xs.min():xs.max()+1]
-    #     cv2.imwrite(base_dir + "/" + image_name + "_facade_crop.jpg", crop)
-
-    # return crop
-    
-    
-def largest_color_rectangle(image, start_y, start_x, target_color):
+def largest_monochrome_rectangle(image, target_color):
     """
-    Trouve le plus grand rectangle de `target_color` contenu dans la région connexe
-    autour de (start_y, start_x).
-
-    Args:
-        image: Tableau numpy de shape (H, W, 3) (RGB).
-        start_y, start_x: Coordonnées du pixel de départ.
-        target_color: Couleur cible sous forme [R, G, B].
-
-    Returns:
-        (y_min, x_min, y_max, x_max) : Coordonnées du rectangle englobant.
-        None si la couleur ne correspond pas au pixel de départ.
+    Finds the largest monochrome rectangle (where all pixels = target_color).
+    Returns (y_min, x_min, y_max, x_max) or None.
     """
-    H, W, _ = image.shape
-    if not np.array_equal(image[start_y, start_x], target_color):
-        return None
+    # Create a boolean mask : True if pixel == target_color
+    mask = np.all(image == target_color, axis=-1)  # Shape: (H, W)
 
-    # Masque des pixels de la couleur cible
-    color_mask = np.all(image == target_color, axis=-1)
+    # For each line, calculate the height of consecutive columns
+    H, W = mask.shape
+    heights = np.zeros((H, W), dtype=int)
+    for y in range(H):
+        for x in range(W):
+            if mask[y, x]:
+                heights[y, x] = heights[y-1, x] + 1 if y > 0 else 1
+            else:
+                heights[y, x] = 0
 
-    # Flood fill (BFS) pour trouver la région connexe
-    visited = np.zeros((H, W), dtype=bool)
-    queue = deque([(start_y, start_x)])
-    visited[start_y, start_x] = True
-    region_pixels = []
+    # Find the largest rectangle in 'heights'
+    max_area = 0
+    best_rect = None
+    for y in range(H):
+        stack = []
+        for x in range(W + 1):
+            # Ajouter une colonne virtuelle à droite pour vider le stack
+            current_height = heights[y, x] if x < W else 0
+            while stack and heights[y, stack[-1]] > current_height:
+                h = heights[y, stack.pop()]
+                w = x if not stack else x - stack[-1] - 1
+                area = h * w
+                if area > max_area:
+                    max_area = area
+                    best_rect = (y - h + 1, stack[-1] + 1 if stack else 0, y, x - 1)
+            stack.append(x)
 
-    # Directions : haut, bas, gauche, droite
-    directions = [(-1, 0), (1, 0), (0, -1), (0, 1)]
+    return best_rect if best_rect else None
 
-    while queue:
-        y, x = queue.popleft()
-        region_pixels.append((y, x))
-        for dy, dx in directions:
-            ny, nx = y + dy, x + dx
-            if 0 <= ny < H and 0 <= nx < W:
-                if color_mask[ny, nx] and not visited[ny, nx]:
-                    visited[ny, nx] = True
-                    queue.append((ny, nx))
-
-    if not region_pixels:
-        return None
-
-    # Extraire le rectangle englobant
-    y_coords, x_coords = zip(*region_pixels)
-    y_min, y_max = min(y_coords), max(y_coords)
-    x_min, x_max = min(x_coords), max(x_coords)
-
-    return (y_min, x_min, y_max, x_max)
