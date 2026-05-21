@@ -66,7 +66,7 @@ def extract_region(mask, image_path, target_color):
     cv2.imwrite(base_dir + "/" + image_name + "_facade_crop.jpg", crop)
     cv2.imwrite(base_dir + "/" + image_name + "_facade_crop_mask.jpg", crop_mask)
     
-    return crop
+    return crop, base_dir + "/" + image_name + "_facade_crop.jpg"
 
 
 def largest_monochrome_rectangle(image, target_color):

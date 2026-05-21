@@ -14,6 +14,13 @@ from buildings.building import Building
 
 from utils.variables import *
 
+import torch
+
+print(torch.__version__)
+print(torch.version.cuda)
+print(torch.cuda.is_available())
+print(torch.cuda.device_count())
+
 # def choose_material():
     # TODO call material recognizer
 
@@ -36,6 +43,7 @@ def create_building(results):
 
 
 def main():
+    
     #####################
     # Output results  #
     #####################

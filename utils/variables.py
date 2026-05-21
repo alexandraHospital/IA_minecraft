@@ -27,3 +27,5 @@ CLASS_MAP = {
     11: 9,  # pillar
     12: 10  # shop
 }
+
+CLASS_MATERIAL_NAME = ['bricks', 'cobblestone', 'deepslate_bricks', 'end_stone_brick', 'stone_bricks']
