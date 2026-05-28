@@ -3,7 +3,9 @@ import os
 import cv2
 import numpy as np
 from collections import deque
-
+import random
+from collections import defaultdict
+from PyQt5.QtGui import QImage
 
 def sort_boxes(result):
         classes = result.boxes.cls.cpu().numpy().astype(int)
@@ -102,5 +104,81 @@ def largest_monochrome_rectangle(image, target_color):
                     best_rect = (y - h + 1, stack[-1] + 1 if stack else 0, y, x - 1)
             stack.append(x)
 
+
     return best_rect if best_rect else None
 
+
+def numpy_to_qimage(img: np.ndarray) -> QImage:
+    img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+
+    img = np.ascontiguousarray(img)
+
+    h, w, ch = img.shape
+
+    return QImage(
+        img.data,
+        w,
+        h,
+        ch * w,
+        QImage.Format_RGB888
+    )
+
+
+def random_rect(W, H, min_size=20, max_size=120):
+
+    w = random.randint(min_size, max_size)
+    h = random.randint(min_size, max_size)
+
+    x1 = random.randint(0, max(0, W - w))
+    y1 = random.randint(0, max(0, H - h))
+
+    x2 = x1 + w
+    y2 = y1 + h
+
+    return x1, y1, x2, y2
+
+
+
+def generate_fake_detections_and_mask(width=1024, height=1024, num_objects=10):
+    base_dir = "./output/results"
+
+    # 1 seule façade
+    mask = np.zeros((height, width, 3), dtype=np.uint8)
+    mask[:, :] = COLOR_PALETTE[0]
+
+    detections = []
+    counts = defaultdict(int)
+
+    for _ in range(num_objects):
+
+        cls = random.randint(1, len(COLOR_PALETTE) - 1)
+        counts[CLASS_NAME[cls]] += 1
+
+        x1, y1, x2, y2 = random_rect(width, height, 20, 180)
+
+        detections.append({
+            "box": [x1, y1, x2, y2],
+            "cls": cls
+        })
+
+    # gros d'abord
+    detections.sort(
+        key=lambda d: (d["box"][2]-d["box"][0]) * (d["box"][3]-d["box"][1]),
+        reverse=True
+    )
+
+    # overlay objets
+    for det in detections:
+        x1, y1, x2, y2 = det["box"]
+        cls = det["cls"]
+
+        cv2.rectangle(
+            mask,
+            (x1, y1),
+            (x2, y2),
+            COLOR_PALETTE[cls],
+            -1
+        )
+
+    cv2.imwrite(base_dir + "/" + "false_facade.jpg", mask)
+    return detections, mask, counts

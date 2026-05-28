@@ -7,7 +7,7 @@ import os
 os.environ.pop("QT_QPA_PLATFORM_PLUGIN_PATH", None)
 
 from PyQt5.QtWidgets import QApplication
-from image_selector import ImageSelector
+from views.image_selector import ImageSelector
 from IPC.image_processing_controller import ImageProcessingController as IPC
 from buildings.elements import Element
 from buildings.building import Building
