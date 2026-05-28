@@ -16,13 +16,17 @@ class ImageProcessingController:
 
 
     def process_image(self):
+        #########################################################
+        ######### uncomment when using inference: ###############
+        #########################################################
         # yolo_location = "./output/models/train2/weights/best.pt"
         # model = YOLO(yolo_location) # best model location
         # results = model(self.image_path)
-
         # detections = sort_boxes(results[0])
-
         # self.mask = draw_boxes(self.image_path, detections, results[0])
+        ###########################################################
+
+        # Comment when using inference
         detections, self.mask, counts = generate_fake_detections_and_mask()
 
         facade_sample = extract_region(self.mask, self.image_path, COLOR_PALETTE[0])

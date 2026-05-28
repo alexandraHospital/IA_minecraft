@@ -28,7 +28,7 @@ def sort_boxes(result):
 
         return detections
 
-def draw_boxes(image_path, detections, result):
+def draw_boxes(image_path, detections):
     base_dir = "./output/results"
     image_name = os.path.splitext(os.path.basename(image_path))[0]
 
@@ -140,6 +140,8 @@ def random_rect(W, H, min_size=20, max_size=120):
 
 
 def generate_fake_detections_and_mask(width=1024, height=1024, num_objects=10):
+    """ Generate fake detections and mask to avoid inference
+    """
     base_dir = "./output/results"
 
     # 1 seule façade

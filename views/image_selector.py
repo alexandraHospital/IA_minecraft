@@ -53,7 +53,9 @@ class ImageSelector(QWidget):
 
     def process_image(self):
         print(self.image_processing_controller.image_path)
+
         self.image_processing_controller.process_image()
+
         self.viewer = MaskViewer(self.image_processing_controller.mask)
         self.viewer.resize(600, 400)
         self.viewer.show()
