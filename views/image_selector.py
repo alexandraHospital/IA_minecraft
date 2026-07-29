@@ -91,8 +91,7 @@ class ImageSelector(QWidget):
         self.image_processing_controller.process_image()
 
         self.viewer = DistanceWindow(
-            self.image_processing_controller.image_path,
-            self.image_processing_controller.mask
+            self.image_processing_controller
         )
 
         self.viewer.resize(900, 700)

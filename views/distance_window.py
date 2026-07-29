@@ -12,27 +12,29 @@ from PyQt5.QtWidgets import (
     QSizePolicy,
 )
 
-from PyQt5.QtCore import Qt
 
 
 class DistanceWindow(QWidget):
-    def __init__(self, image_path, mask_array):
+    def __init__(self, image_processing_controller):
         super().__init__()
 
+        self.image_processing_controller = image_processing_controller
         self.setWindowTitle("Distance measurement")
 
         # ---------- VIEWERS ----------
-        self.mask_viewer = MaskViewer(mask_array)
-        self.mask_viewer.distanceComputed.connect(self.validate_distance)
-        self.image_viewer = ImageViewer(image_path)
+        self.mask_viewer = MaskViewer(self.image_processing_controller.mask)
+        self.mask_viewer.distanceComputed.connect(self.image_processing_controller.set_distance)
+        self.image_processing_controller.maskUpdated.connect(self.mask_viewer.set_mask)
+        self.image_viewer = ImageViewer(self.image_processing_controller.image_path)
 
-        # IMPORTANT: let layout control size
+        # let layout control size
         self.image_viewer.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
         self.mask_viewer.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
 
         # ---------- BUTTON ----------
         self.validate_button = QPushButton("Validate")
-        self.validate_button.clicked.connect(self.validate_distance)
+        self.validate_button.clicked.connect(self.image_processing_controller.process_draw_grid)
+        # self.mask_viewer.set_mask(self.image_processing_controller.mask)
 
         # ---------- LAYOUT ----------
         images_layout = QHBoxLayout()
@@ -62,13 +64,3 @@ class DistanceWindow(QWidget):
             geo.center().x() - width // 2,
             geo.center().y() - height // 2
         )
-
-
-    def validate_distance(self):
-        distance = self.mask_viewer.current_distance
-
-        if distance is None:
-            print("No distance selected")
-            return
-
-        print("Validated distance:", distance)

@@ -6,6 +6,7 @@ from collections import deque
 import random
 from collections import defaultdict
 from PyQt5.QtGui import QImage
+import math
 
 def sort_boxes(result):
         classes = result.boxes.cls.cpu().numpy().astype(int)
@@ -184,3 +185,18 @@ def generate_fake_detections_and_mask(width=1024, height=1024, num_objects=10):
 
     cv2.imwrite(base_dir + "/" + "false_facade.jpg", mask)
     return detections, mask, counts
+
+
+def draw_grid(mask, grid, distance):
+    height, width = mask.shape[:2]
+    distance = math.floor(distance)
+
+    # lignes verticales
+    for x in range(0, width, distance):
+        cv2.line(mask, (x, 0), (x, height), grid, 1)
+
+    # lignes horizontales
+    for y in range(0, height, distance):
+        cv2.line(mask, (0, y), (width, y), grid, 1)
+
+    return mask

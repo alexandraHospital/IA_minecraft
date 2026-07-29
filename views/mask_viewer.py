@@ -21,9 +21,16 @@ class MaskViewer(BaseImageViewer):
         self.mask_array = mask_array
 
         self.points = []
-        
-        self.current_distance = None
 
+
+    def set_mask(self, mask):
+        self.mask = mask
+        print("set mask")
+        pixmap = QPixmap.fromImage(numpy_to_qimage(mask))
+
+        self.setPixmap(pixmap)
+        self.update()
+    
     def mousePressEvent(self, event):
         pos = event.pos()
 
@@ -43,7 +50,6 @@ class MaskViewer(BaseImageViewer):
 
         dist = ((x2 - x1) ** 2 + (y2 - y1) ** 2) ** 0.5
 
-        self.current_distance = dist
         self.distanceComputed.emit(dist)
 
         print("Distance:", dist)

@@ -7,14 +7,19 @@ from torch import jit
 from torchvision import transforms, io
 from buildings.elements import Element
 from pathlib import Path
+from PyQt5.QtCore import pyqtSignal, QObject
 
 
 IMAGE_SIZE = (224, 224)
 
-class ImageProcessingController:
+class ImageProcessingController(QObject):
+    maskUpdated = pyqtSignal(object)
+
     def __init__(self):
+        super().__init__()
         self.image_path = None
         self.mask = None
+        self.distance = None
 
     def process_image(self):
         ############################################## 
@@ -92,3 +97,24 @@ class ImageProcessingController:
             
             facade_image_pred_class = CLASS_MATERIAL_NAME[facade_image_pred_label.cpu()] # put pred label to CPU, otherwise will error
             print(facade_image_pred_class)
+            
+            
+            
+    def set_distance(self, distance):
+        self.distance = distance
+        print("Controller received distance:", distance)
+
+    def process_draw_grid(self):
+        """
+            draw grid on image according to the pointed distance
+        """
+
+        if self.distance is None:
+            raise Exception("distance cannot be undefined")
+        else:
+            print("draw grid")
+            mask_grid = draw_grid(self.mask, (255, 255, 255), self.distance)
+            print(f"fffff {self.mask.shape}")
+            print(f"fffff {mask_grid.shape}")
+            self.maskUpdated.emit(mask_grid)
+            print("after emit")
