@@ -6,12 +6,14 @@ from PyQt5.QtGui import (
     QColor,
 )
 
-from PyQt5.QtCore import Qt
+from PyQt5.QtCore import pyqtSignal
 from utils.img_drawing import numpy_to_qimage
 
 from views.base_image_view import BaseImageViewer
 
 class MaskViewer(BaseImageViewer):
+    distanceComputed = pyqtSignal(float)
+    
     def __init__(self, mask_array):
         pixmap = QPixmap.fromImage(numpy_to_qimage(mask_array))
         super().__init__(pixmap)
@@ -19,6 +21,8 @@ class MaskViewer(BaseImageViewer):
         self.mask_array = mask_array
 
         self.points = []
+        
+        self.current_distance = None
 
     def mousePressEvent(self, event):
         pos = event.pos()
@@ -38,7 +42,10 @@ class MaskViewer(BaseImageViewer):
         (x1, y1), (x2, y2) = self.points
 
         dist = ((x2 - x1) ** 2 + (y2 - y1) ** 2) ** 0.5
+
+        self.current_distance = dist
         self.distanceComputed.emit(dist)
+
         print("Distance:", dist)
 
     def paintEvent(self, event):

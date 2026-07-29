@@ -13,6 +13,7 @@ class ImageProcessingController:
     def __init__(self):
         self.image_path = None
         self.mask = None
+        self.reference_distance = 0
 
 
     def process_image(self):

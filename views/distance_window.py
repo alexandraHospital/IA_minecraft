@@ -23,6 +23,7 @@ class DistanceWindow(QWidget):
 
         # ---------- VIEWERS ----------
         self.mask_viewer = MaskViewer(mask_array)
+        self.mask_viewer.distanceComputed.connect(self.validate_distance)
         self.image_viewer = ImageViewer(image_path)
 
         # IMPORTANT: let layout control size
