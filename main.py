@@ -59,27 +59,6 @@ def main():
     imageSelector.show()
 
 
-    #######################################
-    #            Call yolo on picture
-    #######################################
-    # # TDB: best model location
-    # model_location = "./IA_minecraft/output/models/train2"
-    # model = YOLO(model_location) # best model location
-    # # calls model on this image
-    # results = model(imageSelector.image_data.image_path)
-    
-    ##########################################
-    #         Create building
-    ##########################################
-    
-    
-    
-    ##########################################
-    #            Call Minecraft API
-    #########################################
-
-
-    # output => minecraft structure
     sys.exit(app.exec_())
 
 

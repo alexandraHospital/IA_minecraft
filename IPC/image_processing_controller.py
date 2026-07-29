@@ -4,10 +4,11 @@ import cv2
 from glob import glob
 import torch
 from torch import jit
-from torchvision import transforms
+from torchvision import transforms, io
 from buildings.elements import Element
+from pathlib import Path
 
-base_dir = "./output/results"
+
 IMAGE_SIZE = (224, 224)
 
 class ImageProcessingController:
@@ -16,16 +17,19 @@ class ImageProcessingController:
         self.mask = None
 
     def process_image(self):
-        ####################### 
-        #        YOLO
-        #######################
-        yolo_location = "./output/models/train2/weights/best.pt"
+        ############################################## 
+        #    YOLO INFERENCE
+        # TO HAVE ELEMENTS ON THE BUILDING
+        ##############################################
+        project_root = str(Path(__file__).resolve().parent.parent)
+        
+        yolo_location = project_root + "/output/models/train2/weights/best.pt"
         model = YOLO(yolo_location) # best model location
         results = model(self.image_path)
 
         detections = sort_boxes(results[0])
 
-        self.mask = draw_boxes(self.image_path, detections, results[0])
+        self.mask = draw_boxes(self.image_path, detections)
 
         _, facade_path = extract_region(self.mask, self.image_path, COLOR_PALETTE[0])
 
@@ -35,13 +39,19 @@ class ImageProcessingController:
         # Setup device-agnostic code
         device = "cuda" if torch.cuda.is_available() else "cpu"
 
-        cnn_location = glob("./output/models/MC/MR_*_best.pth")
+        pattern_cnn_location = project_root + "/output/models/MC/MR_*_best.pth"
+        matching_files = glob(pattern_cnn_location)
         
-        print(f"cnn_location: {cnn_location}")
+        if not matching_files:
+            raise FileNotFoundError(f"Model at {pattern_cnn_location} not found.")
 
-        cnn_model = torch.jit.load(cnn_location[0])
+        print(f"cnn_location: {matching_files}")
 
-        # INFERENCE ON FACADE SAMPLE
+        cnn_model = torch.jit.load(matching_files[0])
+
+        ###############################################
+        # INFERENCE ON FACADE SAMPLE TO HAVE MATERIAL
+        ###############################################
         facade_sample_image = io.read_image(str(facade_path)).type(torch.float32)
         facade_sample_image = facade_sample_image / 255 # value bewtween 0 and 1
         
