@@ -151,7 +151,6 @@ class ClassifierTrainer():
                     save_path.mkdir(parents=True, exist_ok=True)
                     scripted = torch.jit.script(self.model)
                     torch.jit.save(scripted, f"{save_path}/MC_{best_acc}_best.pth")
-                    # torch.save(self.model.state_dict(), f"{save_path}/MR_{best_acc}_best.pth")
                     self.logger.info(f"Model save with accuracy {best_acc} at {save_path}/MR_{best_acc}_best.pth")
 
         self.logger.info(f"Best accuracy {best_acc}")

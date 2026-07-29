@@ -43,7 +43,7 @@ def building_analyzer_launcher():
     ###########################
     OUTPUT_DIR = args.output_dir
     if OUTPUT_DIR == "models":
-        output_dir = Path("output/models").resolve()
+        output_dir = Path("output/models/BA").resolve()
         output_dir.mkdir(parents=True, exist_ok=True)
     else:
         output_dir = Path(OUTPUT_DIR).resolve()
@@ -83,7 +83,8 @@ def building_analyzer_launcher():
                   epochs=epochs,
                   data=DATA_FILE,
                   logger=logger,
-                  project=str(output_dir))
+                  project=str(output_dir),
+                  save_dir=str(output_dir) + "/yolo")
     trainer.train()
 
     

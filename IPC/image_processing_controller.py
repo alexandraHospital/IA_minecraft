@@ -23,7 +23,7 @@ class ImageProcessingController:
         ##############################################
         project_root = str(Path(__file__).resolve().parent.parent)
         
-        yolo_location = project_root + "/output/models/train2/weights/best.pt"
+        yolo_location = project_root + "/output/models/BA/yolo/weights/best.pt"
         model = YOLO(yolo_location) # best model location
         results = model(self.image_path)
 
@@ -34,12 +34,9 @@ class ImageProcessingController:
         _, facade_path = extract_region(self.mask, self.image_path, COLOR_PALETTE[0])
 
         # get CNN model
-        # TODO: better way with objects?
-        # TODO: torch.jit does it exist a better way?
-        # Setup device-agnostic code
         device = "cuda" if torch.cuda.is_available() else "cpu"
 
-        pattern_cnn_location = project_root + "/output/models/MC/MR_*_best.pth"
+        pattern_cnn_location = project_root + "/output/models/MC/MC_*_best.pth"
         matching_files = glob(pattern_cnn_location)
         
         if not matching_files:
@@ -69,28 +66,28 @@ class ImageProcessingController:
         # Print out original shape and new shape
         print(f"Original shape: {facade_sample_image.shape}")
         print(f"New shape: {facade_image_transformed.shape}")
-        
+
         cnn_model.eval()
         with torch.inference_mode():
             # Add an extra dimension to image
-            facade_image_transformed_with_batch_size = facade_image_transformed.unsqueeze(dim=0)
+            facade_image_transformed_with_batch_size = facade_image_transformed.unsqueeze(dim = 0)
             # Print out different shapes
             print(f"Custom image transformed shape: {facade_image_transformed.shape}")
             print(f"Unsqueezed custom image shape: {facade_image_transformed_with_batch_size.shape}")
         
            # Make a prediction on image with an extra dimension
-            facade_image_pred = cnn_model(facade_image_transformed.unsqueeze(dim=0).to(device))
+            facade_image_pred = cnn_model(facade_image_transformed.unsqueeze(dim = 0).to(device))
 
             # Let's convert them from logits -> prediction probabilities -> prediction labels
             # Print out prediction logits
             print(f"Prediction logits: {facade_image_pred}")
 
             # Convert logits -> prediction probabilities (using torch.softmax() for multi-class classification)
-            facade_image_pred_probs = torch.softmax(facade_image_pred, dim=1)
+            facade_image_pred_probs = torch.softmax(facade_image_pred, dim = 1)
             print(f"Prediction probabilities: {facade_image_pred_probs}")
 
             # Convert prediction probabilities -> prediction labels
-            facade_image_pred_label = torch.argmax(facade_image_pred_probs, dim=1)
+            facade_image_pred_label = torch.argmax(facade_image_pred_probs, dim = 1)
             print(f"Prediction label: {facade_image_pred_label}")
             
             facade_image_pred_class = CLASS_MATERIAL_NAME[facade_image_pred_label.cpu()] # put pred label to CPU, otherwise will error
