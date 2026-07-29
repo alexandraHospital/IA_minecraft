@@ -34,7 +34,6 @@ class DistanceWindow(QWidget):
         # ---------- BUTTON ----------
         self.validate_button = QPushButton("Validate")
         self.validate_button.clicked.connect(self.image_processing_controller.process_draw_grid)
-        # self.mask_viewer.set_mask(self.image_processing_controller.mask)
 
         # ---------- LAYOUT ----------
         images_layout = QHBoxLayout()

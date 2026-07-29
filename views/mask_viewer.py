@@ -24,17 +24,14 @@ class MaskViewer(BaseImageViewer):
 
 
     def set_mask(self, mask):
-        self.mask = mask
-        print("set mask")
-        pixmap = QPixmap.fromImage(numpy_to_qimage(mask))
-
-        self.setPixmap(pixmap)
-        self.update()
+        self.mask_array = mask
+        self.base_pixmap = QPixmap.fromImage(numpy_to_qimage(self.mask_array))
+        self.update_pixmap()
     
     def mousePressEvent(self, event):
         pos = event.pos()
 
-        # Nouvelle paire de clics
+        # New pair of mouse clicks
         if len(self.points) >= 2:
             self.points = []
 
@@ -47,11 +44,8 @@ class MaskViewer(BaseImageViewer):
 
     def compute_distance(self):
         (x1, y1), (x2, y2) = self.points
-
         dist = ((x2 - x1) ** 2 + (y2 - y1) ** 2) ** 0.5
-
         self.distanceComputed.emit(dist)
-
         print("Distance:", dist)
 
     def paintEvent(self, event):
@@ -76,3 +70,7 @@ class MaskViewer(BaseImageViewer):
             painter.drawLine(x1, y1, x2, y2)
 
         painter.end()
+
+    def clear_points(self):
+        self.points.clear()
+        self.update()

@@ -145,7 +145,7 @@ def generate_fake_detections_and_mask(width=1024, height=1024, num_objects=10):
     """
     base_dir = "./output/results"
 
-    # 1 seule façade
+
     mask = np.zeros((height, width, 3), dtype=np.uint8)
     mask[:, :] = COLOR_PALETTE[0]
 
@@ -164,7 +164,6 @@ def generate_fake_detections_and_mask(width=1024, height=1024, num_objects=10):
             "cls": cls
         })
 
-    # gros d'abord
     detections.sort(
         key=lambda d: (d["box"][2]-d["box"][0]) * (d["box"][3]-d["box"][1]),
         reverse=True
@@ -188,15 +187,15 @@ def generate_fake_detections_and_mask(width=1024, height=1024, num_objects=10):
 
 
 def draw_grid(mask, grid, distance):
-    height, width = mask.shape[:2]
+    result = mask.copy()
     distance = math.floor(distance)
 
-    # lignes verticales
+    height, width = result.shape[:2]
+
     for x in range(0, width, distance):
-        cv2.line(mask, (x, 0), (x, height), grid, 1)
+        result[:, x:x+1] = grid
 
-    # lignes horizontales
     for y in range(0, height, distance):
-        cv2.line(mask, (0, y), (width, y), grid, 1)
+        result[y:y+1, :] = grid
 
-    return mask
+    return result
