@@ -14,6 +14,11 @@ COLOR_PALETTE = [
 CLASS_NAME = ['facade', 'window', 'door', 'cornice', 'sill', 'balcony',
                'blind', 'deco', 'molding', 'pillar', 'shop']
 
+COLOR_TO_CLASS = {
+    tuple(color): idx
+    for idx, color in enumerate(COLOR_PALETTE)
+}
+
 CLASS_MAP = {
     2: 0,   # facade
     3: 1,   # window

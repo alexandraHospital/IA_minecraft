@@ -9,7 +9,6 @@ from buildings.elements import Element
 from pathlib import Path
 from PyQt5.QtCore import pyqtSignal, QObject
 
-
 IMAGE_SIZE = (224, 224)
 
 class ImageProcessingController(QObject):
@@ -20,7 +19,6 @@ class ImageProcessingController(QObject):
         self.image_path = None
         self.mask = None
         self.distance = None
-        self.ratio = 1
 
     def process_image(self):
         device = "cuda" if torch.cuda.is_available() else "cpu"
@@ -115,9 +113,7 @@ class ImageProcessingController(QObject):
 
     def set_distance(self, distance):
         print("Controller received distance:", distance)
-        print("Controller ratio: ", self.ratio)
-        self.distance = distance * self.ratio
-        print("Controller computed distance:", self.distance)
+        self.distance = math.floor(distance)
 
     def process_draw_grid(self):
         """
@@ -127,6 +123,53 @@ class ImageProcessingController(QObject):
         if self.distance is None:
             raise Exception("distance cannot be undefined")
         else:
-            mask_grid = draw_grid(self.mask, (255, 255, 255), self.distance)
-            self.maskUpdated.emit(mask_grid)
-            print("after emit")
+            self.mask = draw_grid(self.mask, (255, 255, 255), self.distance)
+            self.maskUpdated.emit(self.mask)
+
+            #FOR TESTING, TO DELETE LATER:
+            self.process_block()
+            
+    def process_block(self):
+        """ 
+        Transform mask with grid into blocks
+        """
+        print(f"self.mask.shape  {self.mask.shape}")
+        height, width = self.mask.shape[:2]
+        
+        block_structure = []
+
+        for j, y in enumerate(range(0, height, self.distance)):
+            block_structure_line = []
+            for i, x in enumerate(range(0, width, self.distance)):
+
+                print("j", j)
+                x0 = x
+                x1 = x + self.distance
+                y0 = y
+                y1 = y + self.distance
+                
+                if x1 > width:
+                    x1 = width
+                if y1 > height:
+                    y1 = height
+
+                cell = self.mask[y0:y1, x0:x1]
+                
+                cell = cell.reshape(-1, 3)
+                colors, count = np.unique(cell, return_counts=True, axis=0)
+                print("count shape", count.shape)
+                index_max = np.argmax(count)
+                print("index_max", index_max)
+                print("color gagnante:", colors[index_max]) # couleur gagnante
+                
+                winning_color = tuple(colors[index_max])
+                class_id = COLOR_TO_CLASS[winning_color]
+                class_name = CLASS_NAME[class_id]
+                
+                print(f"class_name: {class_name}")
+
+                block_structure_line.append(class_id)
+
+            block_structure.append(block_structure_line)
+            
+        print("FINALE BLOCK STRUCTURE", block_structure)

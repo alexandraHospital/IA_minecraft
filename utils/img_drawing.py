@@ -193,7 +193,6 @@ def draw_grid(mask, grid, distance):
     height, width = result.shape[:2]
 
     for x in range(0, width, distance):
-        print(f"{x} is white")
         result[:, x:x+1] = grid
 
     for y in range(0, height, distance):

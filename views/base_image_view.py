@@ -12,7 +12,6 @@ class BaseImageViewer(QLabel):
         self.base_pixmap = pixmap
         # self.setAlignment(Qt.AlignCenter)
         
-        # self.setSizePolicy(QSizePolicy.Ignored, QSizePolicy.Ignored)
         # viewer sized is fixed to image
         self.setFixedSize(pixmap.size())
 

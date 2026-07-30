@@ -62,28 +62,3 @@ class DistanceWindow(QWidget):
 
         self.setMinimumSize(800, 500)
         self.setMaximumSize(geo.width(), geo.height())
-
-        original_width = self.image_viewer.base_pixmap.width()
-        
-        mask_viewer_width = self.image_viewer.width()
-        
-        print(f"*** mask_viewer_width {mask_viewer_width}")
-        print(f"*** original_width {original_width}")
-        print(f"*** ratio_w {original_width/mask_viewer_width}")
-        
-        original_height = self.image_viewer.base_pixmap.height()
-        mask_viewer_height = self.image_viewer.height()
-        ratio_h = {original_height/mask_viewer_height}
-        print(f"*** mask_viewer_height {mask_viewer_height}")
-        print(f"*** original_height {original_height}")
-        print(f"*** ratio_h {original_height/mask_viewer_height}")
-
-        ratio = ((original_width/mask_viewer_width) + (original_height/mask_viewer_height)) / 2
-        
-        # self.image_processing_controller.ratio = ratio
-
-        # # Center window
-        # self.move(
-        #     geo.center().x() - width // 2,
-        #     geo.center().y() - height // 2
-        # )
