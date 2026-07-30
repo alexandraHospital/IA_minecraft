@@ -36,6 +36,7 @@ class MaskViewer(BaseImageViewer):
             self.points = []
 
         self.points.append((pos.x(), pos.y()))
+        print(f"pos.x(): {pos.x()} pos.y() :{pos.y()}")
 
         if len(self.points) == 2:
             self.compute_distance()
@@ -46,7 +47,6 @@ class MaskViewer(BaseImageViewer):
         (x1, y1), (x2, y2) = self.points
         dist = ((x2 - x1) ** 2 + (y2 - y1) ** 2) ** 0.5
         self.distanceComputed.emit(dist)
-        print("Distance:", dist)
 
     def paintEvent(self, event):
         super().paintEvent(event)

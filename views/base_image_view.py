@@ -10,15 +10,17 @@ class BaseImageViewer(QLabel):
     def __init__(self, pixmap):
         super().__init__()
         self.base_pixmap = pixmap
-        self.setAlignment(Qt.AlignCenter)
+        # self.setAlignment(Qt.AlignCenter)
         
-        self.setSizePolicy(QSizePolicy.Ignored, QSizePolicy.Ignored)
+        # self.setSizePolicy(QSizePolicy.Ignored, QSizePolicy.Ignored)
+        # viewer sized is fixed to image
+        self.setFixedSize(pixmap.size())
 
         self.update_pixmap()
 
     def resizeEvent(self, event):
-        super().resizeEvent(event)
         self.update_pixmap()
+        super().resizeEvent(event)
 
     def update_pixmap(self):
         self.setPixmap(

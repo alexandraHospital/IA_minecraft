@@ -20,6 +20,7 @@ class ImageProcessingController(QObject):
         self.image_path = None
         self.mask = None
         self.distance = None
+        self.ratio = 1
 
     def process_image(self):
         device = "cuda" if torch.cuda.is_available() else "cpu"
@@ -113,8 +114,10 @@ class ImageProcessingController(QObject):
 
 
     def set_distance(self, distance):
-        self.distance = distance
         print("Controller received distance:", distance)
+        print("Controller ratio: ", self.ratio)
+        self.distance = distance * self.ratio
+        print("Controller computed distance:", self.distance)
 
     def process_draw_grid(self):
         """
